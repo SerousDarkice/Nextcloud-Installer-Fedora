@@ -1,13 +1,25 @@
 #!/bin/bash
 
-# Configure MariaDB
+echo "#######"
+echo "Welcome to the Nextcloud MariaDB configuration script!"
+echo "#######"
 
-echo "Enter a database user name"
+# Create variables
+
+echo "Enter a database name."
+read dbname
+echo "Enter a database username."
 read dbuser
-echo "Enter a password for the database user"
+echo "Enter a password for the database user: $dbuser"
 read dbpass
 echo "Enter a password for the database root user"
 read dbrootpass
+
+# Get to work!
+
+echo "#######"
+echo "Starting MariaDB and Redis"
+echo "#######"
 
 systemctl start mariadb
 systemctl enable mariadb
@@ -18,17 +30,15 @@ echo "#########"
 echo "Configuring MariaDB"
 echo "#########"
 
-mysql -e "CREATE DATABASE nextcloud;"
+mysql -e "CREATE DATABASE '$dbname';"
 mysql -e "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
-mysql -e "GRANT ALL ON nextcloud.* TO '$dbuser'@'localhost';"
+mysql -e "GRANT ALL ON '$dbname'.* TO '$dbuser'@'localhost';"
 mysql -e "FLUSH PRIVILEGES;"
 mysql -e "UPDATE mysql.user SET Password=PASSWORD('$dbrootpass') WHERE User='root';"
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
-
-# Configure data caching with Redis
 
 echo "########"
 echo "Configuring Memory Caching to use Redis"
@@ -42,7 +52,8 @@ echo "      )," >> /var/www/html/nextcloud/config/config.php
 
 echo "#########"
 echo "All Done!  Don't forget your credentials"
-echo "The database user is $dbuser with password $dbpass"
-echo "The database root user password is $dbrootpass"
+echo "The database name is $dbname."
+echo "The database user is $dbuser with password $dbpass."
+echo "The database root user password is $dbrootpass."
 echo "#########"
 echo ""
