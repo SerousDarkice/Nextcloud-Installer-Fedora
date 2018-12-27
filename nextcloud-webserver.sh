@@ -7,6 +7,12 @@ web_directory="/var/www/html/nextcloud"
 # Get t'work!
 
 echo "########"
+echo "Installing Jared Busch's Nextcloud apache file"
+echo "########"
+
+curl -O /etc/httpd/conf.d/nextcloud.conf https://raw.githubusercontent.com/sorvani/scripts/master/Nextcloud/nextcloud.conf
+
+echo "########"
 echo "Setting File Permissions"
 echo "########"
 
@@ -32,7 +38,7 @@ semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/apps(/.*)?"
 semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/.htaccess"
 semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/.user.ini"
 
-restorecon -R $web_directory
+restorecon -FRv $web_directory
 
 echo "########"
 echo "Starting Apache"
