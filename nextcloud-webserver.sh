@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Start Apache
+# Set Variables
 
-echo "########"
-echo "Starting Apache"
-echo "########"
+web_directory="/var/www/html/nextcloud"
 
-systemctl start httpd
-systemctl enable httpd
+# Get t'work!
 
 echo "########"
 echo "Setting File Permissions"
@@ -15,16 +12,12 @@ echo "########"
 
 chown apache:apache -R /var/www/html/nextcloud
 
-# Configure Firewall
-
 echo "########"
-echo "Opening the firewall a little"
+echo "Allowing HTTP traffic through the firewall"
 echo "########"
 
 firewall-cmd --add-port=http/tcp --permanent
 firewall-cmd --reload
-
-# Configure SELinux
 
 echo "########"
 echo "Configure SELinux"
@@ -33,15 +26,20 @@ echo "########"
 setsebool -P httpd_can_sendmail 1
 setsebool -P httpd_can_network_connect 1
 
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/html/nextcloud/data(/.*)?'
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/html/nextcloud/config(/.*)?'
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/html/nextcloud/apps(/.*)?'
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/html/nextcloud/.htaccess'
-semanage fcontext -a -t httpd_sys_rw_content_t '/var/www/html/nextcloud/.user.ini'
+semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/data(/.*)?"
+semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/config(/.*)?"
+semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/apps(/.*)?"
+semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/.htaccess"
+semanage fcontext -a -t httpd_sys_rw_content_t "$web_directory/.user.ini"
 
-restorecon -R '/var/www/html/nextcloud/'
+restorecon -R $web_directory
 
-# Fail2Ban Time
+echo "########"
+echo "Starting Apache"
+echo "########"
+
+systemctl start httpd
+systemctl enable httpd
 
 echo "#######"
 echo "Starting Fail2Ban"
