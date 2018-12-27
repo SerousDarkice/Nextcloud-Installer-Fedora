@@ -47,9 +47,14 @@ echo "########"
 systemctl start httpd
 systemctl enable httpd
 
-echo "#######"
+echo "########"
 echo "Starting Fail2Ban"
-echo "#######"
+echo "########"
 
 systemctl start fail2ban
 systemctl enable fail2ban
+
+echo "########"
+echo "All done!  Contine to the database configuration script!"
+echo "########"
+echo ""
