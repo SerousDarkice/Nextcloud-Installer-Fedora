@@ -6,5 +6,5 @@ End goal is to have the one script: installer.sh
 If you use the inidividual scripts, go in this order.
 
 1.  nextcloud-packages.sh
-2.  nextcloud-webservre.sh
+2.  nextcloud-webserver.sh
 3.  nextcloud-database.sh
