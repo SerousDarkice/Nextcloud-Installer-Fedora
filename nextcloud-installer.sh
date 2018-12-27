@@ -35,7 +35,7 @@ dnf install -y  $server_packages $php_packages $selinux_packages $app_packages
 # Download, unzip, and copy NextCloudFiles
 cd /tmp
 curl -o $nextcloud_file $nextcloud_download
-tar -xjvf $nextcloud_file -C $web_directory
+tar -xvf $nextcloud_file -C $web_directory
 
 # Everything under here needs to be checked / redone
 
