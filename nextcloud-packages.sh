@@ -7,7 +7,7 @@ echo "Setting up variables"
 echo "##########"
 
 server_packages="httpd mariadb mariadb-server redis"
-php_packages="php php-pecl-apcu php-gd php-gmp php-json php-pecl-imagick php-imap php-intl php-json php-ldap php-pear-MDB2 php-pear-MDB2-driver-mysql php-mbstring php-pear-Net-Curl php-pecl-mcrypt php-mysqlnd php-opcache php-process php-redis php-smbclient php-xml php-pecl-zip"
+php_packages="php php-pecl-apcu php-gd php-gmp php-json php-pecl-imagick php-imap php-intl php-json php-ldap php-mbstring php-pear-Net-Curl php-pecl-mcrypt php-mysqlnd php-opcache php-process php-redis php-smbclient php-xml php-pecl-zip"
 selinux_packages="policycoreutils policycoreutils-python policycoreutils-python-utils"
 app_packages="bzip2 libreoffice tar fail2ban"
 nextcloud_download="https://download.nextcloud.com/server/releases/nextcloud-15.0.0.tar.bz2"
