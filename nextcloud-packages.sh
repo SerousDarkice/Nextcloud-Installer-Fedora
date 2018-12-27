@@ -21,7 +21,7 @@ echo "##########"
 echo "Updating Linux"
 echo "##########"
 
-dnf update -y
+dnf upgrade -y
 
 echo "##########"
 echo "Installing packages"
