@@ -10,7 +10,7 @@ echo "########"
 echo "Installing Jared Busch's Nextcloud apache file"
 echo "########"
 
-curl -O /etc/httpd/conf.d/nextcloud.conf https://raw.githubusercontent.com/sorvani/scripts/master/Nextcloud/nextcloud.conf
+curl -o /etc/httpd/conf.d/nextcloud.conf https://raw.githubusercontent.com/sorvani/scripts/master/Nextcloud/nextcloud.conf
 
 echo "########"
 echo "Setting File Permissions"
