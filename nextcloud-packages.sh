@@ -36,7 +36,7 @@ echo "##########"
 mkdir -p $web_directory $data_directory
 cd /tmp
 curl -o $nextcloud_file $nextcloud_download
-tar -xvjf $nextcloud_file -C $web_directory
+tar -xvjf $nextcloud_file --strip-components=1 -C $web_directory
 
 echo "##########"
 echo "All Done!  Proceed to webserver configuration!"
