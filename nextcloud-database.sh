@@ -4,17 +4,6 @@ echo "#######"
 echo "Welcome to the Nextcloud MariaDB configuration script!"
 echo "#######"
 
-# Create variables
-
-echo "Enter a database name."
-read dbname
-echo "Enter a database username."
-read dbuser
-echo "Enter a password for the database user: $dbuser"
-read dbpass
-echo "Enter a password for the database root user"
-read dbrootpass
-
 # Get to work!
 
 echo "#######"
@@ -30,27 +19,31 @@ echo "#########"
 echo "Configuring MariaDB"
 echo "#########"
 
-mysql_secure_installation
+#Create a database for nextcloud and a user to access it.
+mysql -e "CREATE DATABASE nextcloud;"
+mysql -e "CREATE USER 'ncuser'@'localhost' IDENTIFIED BY 'ncuserpassword';"
+mysql -e "GRANT ALL ON nextcloud.* TO 'ncuser'@'localhost';"
+mysql -e "FLUSH PRIVILEGES;"
 
-mysql -e "CREATE DATABASE $dbname;"
-mysql -e "CREATE USER $dbuser@'localhost' IDENTIFIED BY $dbpass;"
-mysql -e "GRANT ALL ON $dbname.* TO $dbuser@'localhost';"
+#Secure mariadb. These commands do what mysql_secure_installation does interactively
+mysql -e "UPDATE mysql.user SET Password=PASSWORD('somesecurepassword') WHERE User='root';"
+mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+mysql -e "DELETE FROM mysql.user WHERE User='';"
+mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 
 echo "########"
-echo "Configuring Memory Caching to use Redis"
+echo "Configuring PHP Stuff"
 echo "########"
 
-echo "'memcache.local' => '\OC\Memcache\APCu'," >> /var/www/html/nextcloud/config/config.php
-echo " 'redis' => array(" >> /var/www/html/nextcloud/config/config.php
-echo "     'host' => 'localhost'," >> /var/www/html/nextcloud/config/config.php
-echo "     'port' => 6379," >> /var/www/html/nextcloud/config/config.php
-echo "      )," >> /var/www/html/nextcloud/config/config.php
+sed -i -e 's/;opcache.enable_cli=0/opcache.enable_cli=1/' /etc/php.d/10-opcache.ini;
+sed -i -e 's/opcache.max_accelerated_files=4000/opcache.max_accelerated_files=10000/' /etc/php.d/10-opcache.ini;
+sed -i -e 's/;opcache.save_comments=1/opcache.save_comments=1/' /etc/php.d/10-opcache.ini;
+sed -i -e 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/' /etc/php.d/10-opcache.ini;
+
+systemctl restart php-fpm
 
 echo "#########"
-echo "All Done!  Don't forget your credentials"
-echo "The database name is $dbname."
-echo "The database user is $dbuser with password $dbpass."
-echo "The database root user password is $dbrootpass."
+echo "All Done!  Enjoy Nextcloud"
 echo "#########"
 echo ""
