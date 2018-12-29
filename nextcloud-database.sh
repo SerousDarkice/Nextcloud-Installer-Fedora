@@ -30,14 +30,11 @@ echo "#########"
 echo "Configuring MariaDB"
 echo "#########"
 
+mysql_secure_installation
+
 mysql -e "CREATE DATABASE $dbname;"
 mysql -e "CREATE USER $dbuser@'localhost' IDENTIFIED BY $dbpass;"
 mysql -e "GRANT ALL ON $dbname.* TO $dbuser@'localhost';"
-mysql -e "FLUSH PRIVILEGES;"
-mysql -e "UPDATE mysql.user SET Password=PASSWORD($dbrootpass) WHERE User='root';"
-mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-mysql -e "DELETE FROM mysql.user WHERE User='';"
-mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 
 echo "########"
